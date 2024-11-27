@@ -56,7 +56,7 @@ public class AccountDAO {
     }
 
  // ####### Create new account ########
-    public Account insertAccount(Account account){
+    public Account createAccount(Account account){
         Connection connection = ConnectionUtil.getConnection();
         try{
             String sql = "INSERT INTO account(username, password) VALUES(?,?)";
