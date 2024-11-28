@@ -39,7 +39,7 @@ public class SocialMediaController {
         app.post("/login", this:: postLoginHandler);
         app.post("/messages", this::postMessageHandler);
         app.get("/messages", this::getAllMessagesHandler);
-        // app.get("/messages/{message_id}", this::exampleHandler);
+        app.get("/messages/{message_id}", this::getMessageById);
         // app.delete("/messages/{message_id}", this::exampleHandler);
         // app.patch("/messages/{message_id}", this::exampleHandler);
         // app.get("/accounts/{account_id}/messages}", this::exampleHandler);
@@ -56,6 +56,7 @@ public class SocialMediaController {
     //     context.json("sample text");
     // }
 
+    // Register account//
     private void postAccountHandler(Context ctx) throws JsonProcessingException{
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
@@ -68,9 +69,8 @@ public class SocialMediaController {
         }
     }
 
-
+    //Login into account//
     private void postLoginHandler(Context ctx) throws JsonProcessingException{
-      // to do
       ObjectMapper mapper = new ObjectMapper();
       Account account = mapper.readValue(ctx.body(), Account.class);
       Account addedAccount = accountService.loginAccountbyId(account);
@@ -82,32 +82,40 @@ public class SocialMediaController {
         }
     }
 
+     //Post new message//
     private void postMessageHandler(Context ctx) throws JsonProcessingException{
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(ctx.body(), Message.class);
-
-        if (message.getMessage_text() == null || message.getMessage_text().isBlank() || 
-        message.getMessage_text().length() < 255 
-        // ||  !messageService.isValidUser(message.getPosted_by())
-        ) {
-        
-        ctx.status(400);
-        ctx.result("Invalid message creation request.");
-        return;
-        }
-
-        Message addedMessage = messageService.addMessage(message);
+        Message addedMessage = messageService.createMessage(message);
         if(addedMessage != null){
             ctx.json(mapper.writeValueAsString(addedMessage));
+            ctx.status(200);
         }else{
             ctx.status(400);
         }
     }
 
+    // get all message//
     private void getAllMessagesHandler(Context ctx) {
         List<Message> messages = messageService.getAllMessages();
-        ctx.json(messages);
+        ctx.status(200);
+        ctx.json(messages); 
+    }
+
+    // get message by id//
+    private void getMessageById(Context ctx) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+      Message message = mapper.readValue(ctx.body(), Message.class);
+
+      Message existingMessage = messageService.getMessageById(message.message_id);
+        if(existingMessage != null){
+            ctx.json(existingMessage); 
+        }else{
+            ctx.json("");
+        }
         ctx.status(200);
     }
+
+    
 
 }

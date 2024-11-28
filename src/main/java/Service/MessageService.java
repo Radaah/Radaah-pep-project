@@ -16,20 +16,30 @@ public class MessageService {
     //     this.messageDAO = messageDAO;
     // }
 
-    // ## Add new message ##
-    public Message addMessage(Message message) {
-        Message existMessage = messageDAO.getMessageById(message.getMessage_id());
-        if(existMessage != null)
-         {
-            return null;
-         }
-          return messageDAO.insertNewMessage(message);
-    }
-
-     // ### Retreives all messages ### 
-     public List<Message>getAllMessages() {
+      // ### Retreives all messages ### 
+      public List<Message>getAllMessages() {
         return messageDAO.getAllMessages();
     }
+
+         // ## Add new message ##
+         public Message createMessage(Message message){
+
+            // Message existingMessage = MessageDAO.getMessageById(Message.getMessage_id());
+            if (message.getMessage_text().isBlank() || message.getMessage_text().length() > 255){
+                return null;
+            }
+    
+            List<Message> msgs = getAllMessages();
+            for(Message msg:msgs) {
+                if(msg.getMessage_id() == message.getMessage_id() || msg.getPosted_by() != message.getPosted_by()){
+                    return null;
+                }
+            }
+            return messageDAO.createMessage(message);
+        }
+        
+
+   
 
     // ## Retrieve new message by ID ##
     public Message getMessageById(int message_id){

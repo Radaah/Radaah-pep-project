@@ -24,7 +24,6 @@ public class MessageDAO {
                 rs.getString("message_text"), rs.getLong("time_posted_epoch"));
                 messages.add(message);
         }
-
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
@@ -80,18 +79,23 @@ public class MessageDAO {
 }
 
     // ####### Post a new Message#######
-    public Message insertNewMessage(Message message){
+    public Message createMessage(Message message){
         Connection connection = ConnectionUtil.getConnection();
         try{
             String sql = "INSERT INTO message(posted_by, message_text, time_posted_epoch) VALUES( ?,?,?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setInt(1, message.getPosted_by());
             preparedStatement.setString(2, message.getMessage_text());
             preparedStatement.setLong(3, message.getTime_posted_epoch());
 
             preparedStatement.executeUpdate();
-            return message;
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            if(rs.next()){
+                int vx = (int) rs.getLong(1);
+                return new Message(vx, message.getPosted_by(), message.getMessage_text(), message.getTime_posted_epoch());
+            }
+            // return message;
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
