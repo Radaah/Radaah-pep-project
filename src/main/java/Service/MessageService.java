@@ -12,9 +12,9 @@ public class MessageService {
         messageDAO = new MessageDAO();
     }
 
-    public MessageService(MessageDAO messageDAO){
-        this.messageDAO = messageDAO;
-    }
+    // public MessageService(MessageDAO messageDAO){
+    //     this.messageDAO = messageDAO;
+    // }
 
     // ## Add new message ##
     public Message addMessage(Message message) {
@@ -70,3 +70,4 @@ public class MessageService {
    
 
 }
+
