@@ -42,7 +42,7 @@ public class MessageService {
    
 
     // ## Retrieve new message by ID ##
-    public Message getMessageById(int message_id){
+    public Message getMessageById(Message message, int message_id){
         Message existMessage = messageDAO.getMessageById(message_id);
         if(existMessage != null){
             return existMessage;
@@ -52,8 +52,8 @@ public class MessageService {
 
     // ## Retrieve all message created by a particular user ##
 
-    public Message getMessageByPosterId(int poster_id){
-        Message existMessage = messageDAO.getMessageByPosterId(poster_id);
+    public Message getMessageByPosterId(Message message, int poster_id){
+        Message existMessage = messageDAO.getMessageByPosterId(message, poster_id);
         if(existMessage != null){
             return existMessage;
         }

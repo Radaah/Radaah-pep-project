@@ -40,7 +40,7 @@ public class SocialMediaController {
         app.post("/messages", this::postMessageHandler);
         app.get("/messages", this::getAllMessagesHandler);
         app.get("/messages/{message_id}", this::getMessageById);
-        // app.delete("/messages/{message_id}", this::exampleHandler);
+        // app.delete("/messages/{message_id}", this::deleteMessageById);
         // app.patch("/messages/{message_id}", this::exampleHandler);
         // app.get("/accounts/{account_id}/messages}", this::exampleHandler);
         // app.start(8080);
@@ -105,16 +105,35 @@ public class SocialMediaController {
     // get message by id//
     private void getMessageById(Context ctx) throws JsonProcessingException{
         ObjectMapper mapper = new ObjectMapper();
-      Message message = mapper.readValue(ctx.body(), Message.class);
-
-      Message existingMessage = messageService.getMessageById(message.message_id);
-        if(existingMessage != null){
-            ctx.json(existingMessage); 
-        }else{
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        
+        Message existingMessage = messageService.getMessageById(message, message_id);
+        
+        if (existingMessage != null) {
+            ctx.json(existingMessage);
+        } else {
             ctx.json("");
         }
+        
         ctx.status(200);
     }
+
+    // private void deleteMessageById(Context ctx) throws JsonProcessingException{
+    //     ObjectMapper mapper = new ObjectMapper();
+    //     Message message = mapper.readValue(ctx.body(), Message.class);
+    
+    //     Message existingMessage = messageService.getMessageById(message.getMessage_id());
+    
+    //     if (existingMessage != null) {
+    //         ctx.json(messageService.deleteMessageByMessageId(message.getMessage_id()));
+    //         // ctx.status(200);
+    //     } else {
+    //         ctx.json("");
+    //     }
+    
+    //     ctx.status(200);
+    // }
 
     
 

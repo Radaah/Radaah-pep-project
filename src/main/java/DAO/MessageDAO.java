@@ -55,7 +55,7 @@ public class MessageDAO {
 }
 
     // ####### Get by  message poster_id/ account_id #######
-    public Message getMessageByPosterId(int poster_id) {
+    public Message getMessageByPosterId(Message message, int poster_id ) {
     Connection connection = ConnectionUtil.getConnection();
 
     try{
@@ -66,9 +66,9 @@ public class MessageDAO {
          ResultSet rs = preparedStatement.executeQuery();
 
          while(rs.next()){
-            Message message = new Message(rs.getInt( "message_id"), rs.getInt( " posted_by"),
+            Message msg = new Message(rs.getInt( "message_id"), rs.getInt( " posted_by"),
             rs.getString("message_text"), rs.getLong("time_posted_epoch"));
-            return message;
+            return msg;
          }
 
     }catch(SQLException e){
