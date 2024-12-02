@@ -70,7 +70,7 @@ public class MessageService {
     }
     
     // ## Delete a message by a particular ID ##
-     public Message deleteMessageByMessageId(int message_id){
+     public Message deleteMessageByMessageId(int message_id, Message message){
         Message existMessage = messageDAO.getMessageById(message_id);
         if(existMessage != null){
             return messageDAO.deleteMessageById(message_id);
