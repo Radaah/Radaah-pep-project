@@ -42,35 +42,34 @@ public class MessageService {
    
 
     // ## Retrieve new message by ID ##
-    public Message getMessageById(Message message, int message_id){
-        Message existMessage = messageDAO.getMessageById(message_id);
-        if(existMessage != null){
-            return existMessage;
-        }
-        return null;
+    public Message getMessageById( int message_id){
+      return messageDAO.getMessageById(message_id);
+        // if(existMessage != null){
+        //     return existMessage;
+        // }
+        // return null;
     }
 
     // ## Retrieve all message created by a particular user ##
 
-    public Message getMessageByPosterId(Message message, int poster_id){
-        Message existMessage = messageDAO.getMessageByPosterId(message, poster_id);
-        if(existMessage != null){
-            return existMessage;
-        }
-        return null;
+    public List <Message> getMessageByPosterId( int poster_id){
+        return messageDAO.getMessageByPosterId( poster_id);
+      
+        // return null;
     }
 
     // ## Update a message by a particular ID ##
     public Message updatMessageById( Message message, int message_id){
         Message existMessage = messageDAO.getMessageById(message_id);
-        if(existMessage != null){
-            return messageDAO.updateMessageById(message);
+        if(existMessage != null && !message.getMessage_text().isBlank() && message.getMessage_text().length() < 255){
+             messageDAO.updateMessageById(message, message_id);
+             return  messageDAO.getMessageById(message_id);
         }
         return null;
     }
     
     // ## Delete a message by a particular ID ##
-     public Message deleteMessageByMessageId(int message_id, Message message){
+     public Message deleteMessageByMessageId(int message_id){
         Message existMessage = messageDAO.getMessageById(message_id);
         if(existMessage != null){
             return messageDAO.deleteMessageById(message_id);

@@ -105,35 +105,31 @@ public class SocialMediaController {
     // get message by id//
     private void getMessageById(Context ctx) throws JsonProcessingException{
         ObjectMapper mapper = new ObjectMapper();
-        Message message = mapper.readValue(ctx.body(), Message.class);
+        // Message message = mapper.readValue(ctx.body(), Message.class);
         int message_id = Integer.parseInt(ctx.pathParam("message_id"));
         
-        Message existingMessage = messageService.getMessageById(message, message_id);
+        Message existingMessage = messageService.getMessageById( message_id);
         
         if (existingMessage != null) {
             ctx.json(existingMessage);
-        } else {
-            ctx.json("");
-        }
+        } 
         
         ctx.status(200);
     }
 
    // Get message by account-id/ Poster_id
     private void getMessageByPosterId(Context ctx) throws JsonProcessingException{
-        ObjectMapper mapper = new ObjectMapper();
-        Message message = mapper.readValue(ctx.body(), Message.class);
+        // ObjectMapper mapper = new ObjectMapper();
+        // Message message = mapper.readValue(ctx.body(), Message.class);
         int poster_id = Integer.parseInt(ctx.pathParam("account_id"));
         
-        Message existingMessage = messageService.getMessageByPosterId(message, poster_id);
+         ctx.json(messageService.getMessageByPosterId( poster_id)) ;
         
-        if (existingMessage != null) {
-            ctx.json(existingMessage);
-        } else {
-            ctx.json("");
-        }
+       
+            // ctx.json(existingMessage);
         
-        ctx.status(200);
+        
+        // ctx.status(200);
     }
 
     // Update message by id
@@ -142,28 +138,27 @@ public class SocialMediaController {
         Message message = mapper.readValue(ctx.body(), Message.class);
         int message_id = Integer.parseInt(ctx.pathParam("message_id"));
         
-        Message updatedMessage = messageService.getMessageByPosterId(message, message_id);
+        Message updatedMessage = messageService.updatMessageById(message, message_id);
         
-        if (updatedMessage != null) {
+        if (updatedMessage == null) {
           ctx.status(400);
         } else {
             ctx.json(mapper.writeValueAsString(updatedMessage));
         }  
-        ctx.status(200);
+        // ?ctx.status(200);
     }
 
 
     // delete message by id
     private void deleteMessageById(Context ctx) throws JsonProcessingException{
         ObjectMapper mapper = new ObjectMapper();
-        Message message = mapper.readValue(ctx.body(), Message.class);
+        // Message message = mapper.readValue(ctx.body(), Message.class);
         int message_id = Integer.parseInt(ctx.pathParam("message_id"));
-        Message existingMessage = messageService.getMessageById(message, message_id);
+        Message existingMessage = messageService.deleteMessageByMessageId( message_id);
         if (existingMessage != null) {
-            ctx.json(messageService.deleteMessageByMessageId(message_id, message));
+            // ctx.json(messageService.deleteMessageByMessageId(message_id, message));
+            ctx.json(mapper.writeValueAsString(existingMessage));
             ctx.status(200);
-        } else {
-            ctx.json("");
         }
         ctx.status(200);
     }

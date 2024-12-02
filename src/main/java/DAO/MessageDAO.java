@@ -35,7 +35,7 @@ public class MessageDAO {
         Connection connection = ConnectionUtil.getConnection();
 
         try{
-             String sql = "SELECT * FROM account WHERE message_id = ?";
+             String sql = "SELECT * FROM message WHERE message_id = ?";
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
              preparedStatement.setInt(1,message_id);
@@ -55,11 +55,11 @@ public class MessageDAO {
 }
 
     // ####### Get by  message poster_id/ account_id #######
-    public Message getMessageByPosterId(Message message, int poster_id ) {
+    public List <Message> getMessageByPosterId( int poster_id ) {
     Connection connection = ConnectionUtil.getConnection();
-
+    List<Message> messages = new ArrayList<>();
     try{
-         String sql = "SELECT * FROM account WHERE posted_by = ?";
+         String sql = "SELECT * FROM message WHERE posted_by = ?";
          PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
          preparedStatement.setInt(1,poster_id);
@@ -68,13 +68,13 @@ public class MessageDAO {
          while(rs.next()){
             Message msg = new Message(rs.getInt( "message_id"), rs.getInt( " posted_by"),
             rs.getString("message_text"), rs.getLong("time_posted_epoch"));
-            return msg;
+             messages.add(msg);
          }
 
     }catch(SQLException e){
         System.out.println(e.getMessage());
     }
-    return null;
+    return messages;
 
 }
 
@@ -104,22 +104,22 @@ public class MessageDAO {
 
 
     // Update an existing Message 
-    public Message updateMessageById(Message message) {
+    public void updateMessageById(Message message, int id) {
         Connection connection = ConnectionUtil.getConnection();
         try{
-            String sql = "UPDATE message SET message_text = ?, time_posted_epoch = ? WHERE message_id = ?";
+            String sql = "UPDATE message SET message_text = ? WHERE message_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setString(1, message.getMessage_text());
-            preparedStatement.setLong(2, message.getTime_posted_epoch());
-            preparedStatement.setInt(3, message.getMessage_id());
+            // preparedStatement.setLong(2, message.getTime_posted_epoch());
+            preparedStatement.setInt(2, id);
 
             preparedStatement.executeUpdate();
-            return message;
+            // return message;
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
-        return null;
+        // return null;
         
 
     }
@@ -129,11 +129,13 @@ public class MessageDAO {
         Connection connection = ConnectionUtil.getConnection();
 
         try{
+            Message message = getMessageById(message_id);
             String sql = "DELETE FROM message WHERE message_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, message_id);
 
             preparedStatement.executeUpdate();
+            return message;
 
         }catch(SQLException e){
             System.out.println(e.getMessage());
