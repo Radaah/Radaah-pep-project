@@ -12,10 +12,6 @@ public class MessageService {
         messageDAO = new MessageDAO();
     }
 
-    // public MessageService(MessageDAO messageDAO){
-    //     this.messageDAO = messageDAO;
-    // }
-
       // ### Retreives all messages ### 
       public List<Message>getAllMessages() {
         return messageDAO.getAllMessages();
@@ -24,7 +20,6 @@ public class MessageService {
          // ## Add new message ##
          public Message createMessage(Message message){
 
-            // Message existingMessage = MessageDAO.getMessageById(Message.getMessage_id());
             if (message.getMessage_text().isBlank() || message.getMessage_text().length() > 255){
                 return null;
             }
@@ -44,18 +39,12 @@ public class MessageService {
     // ## Retrieve new message by ID ##
     public Message getMessageById( int message_id){
       return messageDAO.getMessageById(message_id);
-        // if(existMessage != null){
-        //     return existMessage;
-        // }
-        // return null;
     }
 
     // ## Retrieve all message created by a particular user ##
 
     public List <Message> getMessageByPosterId( int poster_id){
         return messageDAO.getMessageByPosterId( poster_id);
-      
-        // return null;
     }
 
     // ## Update a message by a particular ID ##

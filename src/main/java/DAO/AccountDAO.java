@@ -25,7 +25,6 @@ public class AccountDAO {
                 rs.getString("password"));
                 accounts.add(account);
         }
-
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
@@ -35,7 +34,6 @@ public class AccountDAO {
 // ####### Retrieve by account-id ########
     public Account getAccountByCredentials(Account account) {
         Connection connection = ConnectionUtil.getConnection();
-
         try{
              String sql = "SELECT * FROM account WHERE username= ? AND password = ?";
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -72,7 +70,6 @@ public class AccountDAO {
                 int vx = (int) rs.getLong(1);
                 return new Account(vx, account.getUsername(), account.getPassword());
             }
-            // return account;
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
