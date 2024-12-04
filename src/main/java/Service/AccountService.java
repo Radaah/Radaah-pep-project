@@ -21,7 +21,9 @@ public class AccountService {
     public Account loginAccountbyId(Account account){
         Account existingusername = accountDAO.getAccountByCredentials(account);
         if(existingusername != null){
+            System.out.println("Retrieved Messages: " + existingusername);
             return existingusername;
+            
         }
         return null;
     }
